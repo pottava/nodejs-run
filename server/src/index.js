@@ -11,17 +11,23 @@ app.get("/health", (_, res) => {
 import log from "./lib/logger.js";
 app.use(log);
 
+// JSON parser
+app.use(express.json());
+
 // Static files
 import path from "path";
 import { fileURLToPath } from "url";
 app.use(express.static(path.dirname(fileURLToPath(import.meta.url)) + "/public"));
 
 // API の実装
+import routeMetrics from "./routes/metrics.js";
+app.use("/api/v1/metrics", routeMetrics);
+
 import routeBigQuery from "./routes/big-query.js";
 app.use("/api/v1/big-query", routeBigQuery);
 
-import routeSharePoint from "./routes/share-point.js";
-app.use("/api/v1/share-point", routeSharePoint);
+import routeExternalAPIs from "./routes/external-apis.js";
+app.use("/api/v1/external-apis", routeExternalAPIs);
 
 // Server configurations
 const port = parseInt(process.env.PORT) || 8080;

@@ -57,7 +57,7 @@ jobs:
         with:
           service: app
           region: ${{ env.GOOGLE_CLOUD_REGION }}
-          image: ${{ env.GOOGLE_CLOUD_REGION }}-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/my-apps/streamlit:${{ github.sha }}
-          flags: --service-account=sa-app@${{ secrets.GOOGLE_CLOUD_PROJECT }}.iam.gserviceaccount.com
+          image: ${{ env.GOOGLE_CLOUD_REGION }}-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/apps/server:${{ github.sha }}
+          flags: --service-account=sa-app@${{ secrets.GOOGLE_CLOUD_PROJECT }}.iam.gserviceaccount.com --cpu=0.1 --memory=128Mi --concurrency=1 --max-instances=10 --no-allow-unauthenticated
           env_vars: |
             PROJECT_ID=${{ secrets.GOOGLE_CLOUD_PROJECT }}

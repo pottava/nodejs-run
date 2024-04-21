@@ -36,7 +36,10 @@ bq mk --table --description "Metrics table" \
 
 ### Cloud Run
 
-BigQuery へデータを書き込むためのサービスアカウントを作成します。
+サービスアカウントを作成し、以下の権限を付与します。
+
+- BigQuery へデータを書き込む
+- Secret Manager からデータを読み込む（次の手順）
 
 ```sh
 project_id=$( gcloud config get-value project )
@@ -45,6 +48,18 @@ gcloud iam service-accounts create "sa-app" \
 gcloud projects add-iam-policy-binding "${project_id}" \
     --member "serviceAccount:sa-app@${project_id}.iam.gserviceaccount.com" \
     --role "roles/bigquery.dataEditor"
+```
+
+### Secret Manager
+
+外部 API 用のキーを登録
+
+```sh
+echo -n "my-super-secret-apikey" | gcloud secrets create apikey-001 \
+    --replication-policy "automatic" --data-file=-
+gcloud secrets add-iam-policy-binding apikey-001 \
+    --member "serviceAccount:sa-app@${project_id}.iam.gserviceaccount.com" \
+    --role "roles/secretmanager.secretAccessor"
 ```
 
 ## GitHub Actions によるトリガー
@@ -116,6 +131,26 @@ git push origin main
 ```
 
 ## ローカル開発
+
+### API サーバーの起動
+
+```sh
+cd server/src
+npm run lint
+npm start
+```
+
+### Docker での API サーバー起動
+
+```sh
+docker build -t apis server/src
+docker run --name apis --rm -p 8080:8080 \
+    -v "$HOME/.config/gcloud:/app/config:ro" \
+    --env PROJECT_ID=$PROJECT_ID \
+    --env CLOUDSDK_CONFIG=/app/config \
+    --env GOOGLE_APPLICATION_CREDENTIALS=/app/config/application_default_credentials.json \
+    apis
+```
 
 ### おまけ
 

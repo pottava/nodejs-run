@@ -9,15 +9,33 @@
     <h3>APIs</h3>
     <ul>
       <li>
-        BigQuery
+        メトリクスの登録
         <ul>
-          <li>Post /api/v1/big-query/:id</li>
+          <li>Post /api/v1/metrics/:id</li>
+          <li>
+            例: curl -iXPOST -H 'Content-Type: application/json' -d '{"key":1,"value":"0.1"}'
+            http://localhost:8080/api/v1/metrics/001
+          </li>
         </ul>
       </li>
       <li>
-        SharePoint
+        BigQuery のみ
         <ul>
-          <li>Post /api/v1/share-point/:id</li>
+          <li>Post /api/v1/big-query/:id</li>
+          <li>
+            例: curl -iXPOST -H 'Content-Type: application/json' -d '{"key":1,"value":"0.1"}'
+            http://localhost:8080/api/v1/big-query/001
+          </li>
+        </ul>
+      </li>
+      <li>
+        外部 API 実行のみ
+        <ul>
+          <li>Post /api/v1/external-apis/:id</li>
+          <li>
+            例: curl -iXPOST -H 'Content-Type: application/json' -d '{"key":1,"value":"0.1"}'
+            http://localhost:8080/api/v1/external-apis/001
+          </li>
         </ul>
       </li>
     </ul>
