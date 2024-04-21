@@ -1,8 +1,8 @@
 import Router from "express";
 const router = Router();
 
-router.post("/metrics", (req, res) => {
-  res.send("001 saved!");
+router.post("/:id", (req, res) => {
+  res.send(`ID: ${req.params.id}`);
 });
 
 export default router;

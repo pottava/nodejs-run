@@ -20,14 +20,11 @@ app.use(express.static(path.dirname(fileURLToPath(import.meta.url)) + "/public")
 import routeBigQuery from "./routes/big-query.js";
 app.use("/api/v1/big-query", routeBigQuery);
 
-import routeGoogleDrive from "./routes/google-drive.js";
-app.use("/api/v1/google-drive", routeGoogleDrive);
-
 import routeSharePoint from "./routes/share-point.js";
 app.use("/api/v1/share-point", routeSharePoint);
 
 // Server configurations
 const port = parseInt(process.env.PORT) || 8080;
 app.listen(port, () => {
-  console.log(`Server listening on ${port}`);
+  console.info(`Server listening on ${port}`);
 });
