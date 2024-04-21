@@ -1,7 +1,7 @@
 Node.js on Cloud Run
 =====
 
-## GitHub Actions によるトリガー
+## Google Cloud 準備
 
 ### API の有効化
 
@@ -16,12 +16,44 @@ gcloud services enable compute.googleapis.com artifactregistry.googleapis.com \
 gcloud artifacts repositories create apps --repository-format docker --location asia-northeast1
 ```
 
+### BigQuery
+
+データセットを作成し
+
+```sh
+bq --location "asia-northeast1" mk --dataset default
+```
+
+テーブルを作成します
+
+```sh
+bq mk --table --description "Metrics table" \
+    --schema 'ts:TIMESTAMP,key:STRING,metric:STRING' \
+    --time_partitioning_field ts \
+    --time_partitioning_type DAY \
+    default.metrics
+```
+
+### Cloud Run
+
+BigQuery へデータを書き込むためのサービスアカウントを作成します。
+
+```sh
+project_id=$( gcloud config get-value project )
+gcloud iam service-accounts create "sa-app" \
+    --display-name "SA for APIs" --description "Service Account for APIs"
+gcloud projects add-iam-policy-binding "${project_id}" \
+    --member "serviceAccount:sa-app@${project_id}.iam.gserviceaccount.com" \
+    --role "roles/bigquery.dataEditor"
+```
+
+## GitHub Actions によるトリガー
+
 ### Workload Identity Federation の準備
 
 CI/CD 用のサービスアカウント作成
 
 ```sh
-project_id=$( gcloud config get-value project )
 gcloud iam service-accounts create "sa-cicd" \
     --display-name "SA for CI/CD" --description "Service Account for CI/CD pipelines"
 gcloud projects add-iam-policy-binding "${project_id}" \
@@ -72,8 +104,8 @@ EOF
 
 プロジェクトの Actions secrets and variables に以下の値を設定します。
 
-- GOOGLE_CLOUD_PROJECT: プロジェクト ID（variables として）
-- GOOGLE_CLOUD_WORKLOAD_IDP: Workload Identity の IdP ID（secrets として）
+- GOOGLE_CLOUD_PROJECT: プロジェクト ID
+- GOOGLE_CLOUD_WORKLOAD_IDP: Workload Identity の IdP ID
 
 ### git コマンドでパイプラインを起動
 
@@ -82,6 +114,8 @@ git add .
 git commit -m "Add files"
 git push origin main
 ```
+
+## ローカル開発
 
 ### おまけ
 
