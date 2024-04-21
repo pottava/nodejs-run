@@ -1,0 +1,22 @@
+{
+  "name": "app",
+  "description": "Simple rest APIs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "eslint . --fix"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.1.1",
+    "eslint": "^9.1.0",
+    "globals": "^15.0.0"
+  }
+}
