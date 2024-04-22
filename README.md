@@ -7,7 +7,8 @@ Node.js on Cloud Run
 
 ```sh
 gcloud services enable compute.googleapis.com artifactregistry.googleapis.com \
-    iamcredentials.googleapis.com run.googleapis.com
+    iamcredentials.googleapis.com run.googleapis.com bigquery.googleapis.com \
+    secretmanager.googleapis.com
 ```
 
 ### Artifact Registry にリポジトリを作成
@@ -34,7 +35,7 @@ bq mk --table --description "Metrics table" \
     default.metrics
 ```
 
-### Cloud Run
+### API server on Cloud Run
 
 サービスアカウントを作成し、以下の権限を付与します。
 
@@ -151,6 +152,16 @@ docker run --name apis --rm -p 8080:8080 \
     --env GOOGLE_APPLICATION_CREDENTIALS=/app/config/application_default_credentials.json \
     apis
 ```
+
+### Cloud Run への接続
+
+```sh
+endpoint="$( gcloud run services describe "app" --region "asia-northeast1" --format 'value(status.url)' )"
+curl -iXPOST -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
+    -H 'Content-Type: application/json' -d '{"key":1,"value":"0.1"}' \
+    "${endpoint}/api/v1/external-apis/001"
+```
+
 
 ### おまけ
 
