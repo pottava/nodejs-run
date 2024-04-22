@@ -21,23 +21,11 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Lint libraries
+      - name: Lint
         run: |
           python -m pip install requests flake8 isort black
-          python -m flake8 --exclude=.venv --extend-ignore=E203 --max-line-length=120 --show-source .
-        working-directory: client/lib
-
-      - name: Lint 001
-        run: |
-          python -m pip install requests flake8 isort black
-          python -m flake8 --exclude=.venv --extend-ignore=E203 --max-line-length=120 --show-source .
-        working-directory: client/001
-
-      - name: Lint 002
-        run: |
-          python -m pip install requests flake8 isort black
-          python -m flake8 --exclude=.venv --extend-ignore=E203 --max-line-length=120 --show-source .
-        working-directory: client/002
+          python -m flake8 --exclude=.venv --extend-ignore=E203,E402 --max-line-length=120 --show-source .
+        working-directory: client
 
   release-client:
     name: Release clients

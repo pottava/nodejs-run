@@ -20,7 +20,7 @@ gcloud auth application-default login
 ```sh
 cd 001
 endpoint="$( gcloud run services describe "app" --region "asia-northeast1" --format 'value(status.url)' )"
-API_ENDPOINT=${endpoint} python main.py
+API_ENDPOINT=${endpoint} API_SECURED=True python main.py
 ```
 
 ### ツール
@@ -28,14 +28,14 @@ API_ENDPOINT=${endpoint} python main.py
 Format
 
 ```sh
-python -m black 001
-python -m isort 001
+python -m black .
+python -m isort .
 ```
 
 Lint
 
 ```sh
-python -m flake8 --exclude=.venv --extend-ignore=E203 --max-line-length=120 --show-source 001
+python -m flake8 --exclude=.venv --extend-ignore=E203,E402 --max-line-length=120 --show-source .
 ```
 
 ## コンテナ
@@ -44,7 +44,6 @@ python -m flake8 --exclude=.venv --extend-ignore=E203 --max-line-length=120 --sh
 
 ```sh
 docker build -t client-001 --build-arg CLIENT=001 .
-docker build -t client-002 --build-arg CLIENT=002 .
 ```
 
 ### 実行
