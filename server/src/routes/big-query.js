@@ -16,7 +16,7 @@ export function timestamp(date) {
 
 router.post("/:id", (req, res) => {
   const record = {
-    ts: bigquery.timestamp(new Date()),
+    ts: timestamp(new Date()),
     key: `${req.params.id}-${req.body.key}`,
     metric: req.body.value,
   };

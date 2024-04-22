@@ -15,7 +15,7 @@ router.post("/:id", async (req, res) => {
     return;
   }
   const record = {
-    ts: bigquery.timestamp(new Date()),
+    ts: timestamp(new Date()),
     key: `${req.params.id}-${req.body.key}`,
     metric: req.body.value,
   };
