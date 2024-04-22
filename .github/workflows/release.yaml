@@ -67,11 +67,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Get short SHA
+        run: echo "SHORT_SHA=$(echo "${{ github.sha }}" | cut -c 1-7)" >> $GITHUB_ENV
+
       - id: "build-001"
         uses: docker/build-push-action@v5
         with:
           context: ./client
-          tags: ${{ env.GOOGLE_CLOUD_REGION }}-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/apps/client-001:${{ github.sha }}
+          tags: ${{ env.GOOGLE_CLOUD_REGION }}-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/apps/client-001:${{ env.SHORT_SHA }}
           build-args: CLIENT=001
           push: true
 
@@ -79,7 +82,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./client
-          tags: ${{ env.GOOGLE_CLOUD_REGION }}-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/apps/client-002:${{ github.sha }}
+          tags: ${{ env.GOOGLE_CLOUD_REGION }}-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/apps/client-002:${{ env.SHORT_SHA }}
           build-args: CLIENT=002
           push: true
 
@@ -110,11 +113,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Get short SHA
+        run: echo "SHORT_SHA=$(echo "${{ github.sha }}" | cut -c 1-7)" >> $GITHUB_ENV
+
       - id: "build"
         uses: docker/build-push-action@v5
         with:
           context: ./server/src
-          tags: ${{ env.GOOGLE_CLOUD_REGION }}-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/apps/server:${{ github.sha }}
+          tags: ${{ env.GOOGLE_CLOUD_REGION }}-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/apps/server:${{ env.SHORT_SHA }}
           push: true
 
       - id: "deploy"
@@ -122,7 +128,7 @@ jobs:
         with:
           service: app
           region: ${{ env.GOOGLE_CLOUD_REGION }}
-          image: ${{ env.GOOGLE_CLOUD_REGION }}-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/apps/server:${{ github.sha }}
+          image: ${{ env.GOOGLE_CLOUD_REGION }}-docker.pkg.dev/${{ secrets.GOOGLE_CLOUD_PROJECT }}/apps/server:${{ env.SHORT_SHA }}
           flags: --service-account=sa-app@${{ secrets.GOOGLE_CLOUD_PROJECT }}.iam.gserviceaccount.com --cpu=0.1 --memory=128Mi --concurrency=1 --max-instances=10 --no-allow-unauthenticated
           env_vars: |
             PROJECT_ID=${{ secrets.GOOGLE_CLOUD_PROJECT }}
