@@ -34,7 +34,7 @@ fi
 # クライアントの最新情報を確認
 endpoint=""
 versions=""
-if [ $local ]; then
+if [ $local == true ]; then
   versions="$( curl -s http://localhost:8080/api/v1/versions )"
 else
   endpoint="$( gcloud run services describe "app" --region "asia-northeast1" --format 'value(status.url)' )"
@@ -43,7 +43,7 @@ fi
 tag="$( echo "${versions}" | jq -r '.client_001' )"
 
 # イメージの取得
-if [ $local ]; then
+if [ $local == true ]; then
   tag="client-001"
 else
   gcloud auth configure-docker asia-northeast1-docker.pkg.dev --quiet >/dev/null 2>&1
