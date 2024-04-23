@@ -9,11 +9,18 @@
     <h3>APIs</h3>
     <ul>
       <li>
+        クライアント バージョン
+        <ul>
+          <li>GET /api/v1/versions</li>
+          <li>例: curl -s http://localhost:8080/api/v1/versions | jq .</li>
+        </ul>
+      </li>
+      <li>
         メトリクスの登録
         <ul>
-          <li>Post /api/v1/metrics/:id</li>
+          <li>POST /api/v1/metrics/:id</li>
           <li>
-            例: curl -iXPOST -H 'Content-Type: application/json' -d '{"key":1,"value":"0.1"}'
+            例: curl -isXPOST -H 'Content-Type: application/json' -d '{"key":1,"value":"0.1"}'
             http://localhost:8080/api/v1/metrics/001
           </li>
         </ul>
@@ -21,9 +28,9 @@
       <li>
         BigQuery のみ
         <ul>
-          <li>Post /api/v1/big-query/:id</li>
+          <li>POST /api/v1/big-query/:id</li>
           <li>
-            例: curl -iXPOST -H 'Content-Type: application/json' -d '{"key":1,"value":"0.1"}'
+            例: curl -isXPOST -H 'Content-Type: application/json' -d '{"key":1,"value":"0.1"}'
             http://localhost:8080/api/v1/big-query/001
           </li>
         </ul>
@@ -31,9 +38,9 @@
       <li>
         外部 API 実行のみ
         <ul>
-          <li>Post /api/v1/external-apis/:id</li>
+          <li>POST /api/v1/external-apis/:id</li>
           <li>
-            例: curl -iXPOST -H 'Content-Type: application/json' -d '{"key":1,"value":"0.1"}'
+            例: curl -isXPOST -H 'Content-Type: application/json' -d '{"key":1,"value":"0.1"}'
             http://localhost:8080/api/v1/external-apis/001
           </li>
         </ul>

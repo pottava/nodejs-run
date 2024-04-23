@@ -137,8 +137,18 @@ git push origin main
 
 ```sh
 cd server/src
+pnpm install
 npm run lint
+export PROJECT_ID=$( gcloud config get-value project )
 npm start
+```
+
+アクセスしてみる
+
+```sh
+open http://localhost:8080
+curl -s http://localhost:8080/api/v1/versions | jq .
+curl -iXPOST -H 'Content-Type: application/json' -d '{"key":1,"value":"0.1"}' http://localhost:8080/api/v1/metrics/001
 ```
 
 ### Docker での API サーバー起動

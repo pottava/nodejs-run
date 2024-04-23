@@ -4,6 +4,8 @@ router.disable("x-powered-by");
 
 import secret from "../lib/secret-manager.js";
 import { insert, timestamp } from "./big-query.js";
+import pino from "pino";
+const logger = pino({ level: process.env.LOG_LEVEL || "info" });
 
 router.post("/:id", async (req, res) => {
   let apikey;

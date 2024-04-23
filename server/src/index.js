@@ -7,6 +7,10 @@ app.get("/health", (_, res) => {
   res.status(200).end();
 });
 
+// クライアント バージョン管理用 API
+import routeVersions from "./versions.js";
+app.use("/api/v1/versions", routeVersions);
+
 // Access logs
 import log from "./lib/logger.js";
 app.use(log);
