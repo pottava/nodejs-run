@@ -120,3 +120,4 @@ jobs:
           flags: --service-account=sa-app@${{ secrets.GOOGLE_CLOUD_PROJECT }}.iam.gserviceaccount.com --cpu=0.1 --memory=128Mi --concurrency=1 --max-instances=10 --no-allow-unauthenticated
           env_vars: |
             PROJECT_ID=${{ secrets.GOOGLE_CLOUD_PROJECT }}
+            CURRENT_VERSION=${{ env.SHORT_SHA }}
